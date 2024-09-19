@@ -4,7 +4,7 @@ import { env } from "../../runtimeEnv"
 import { observer } from "mobx-react-lite"
 import { useWandelApp } from "../../WandelAppContext"
 import { LoadingScreen } from "./LoadingScreen"
-import { WandelAppPlaceholder } from "../../templates/Placeholder/WandelAppPlaceholder"
+import { SafetyZones } from "../../templates/SafetyZones/SafetyZones"
 import { NoMotionGroupModal } from "@wandelbots/wandelbots-js-react-components"
 
 export const WandelAppMain = observer(() => {
@@ -23,7 +23,7 @@ export const WandelAppMain = observer(() => {
   return (
     <>
       {/* add your code here */}
-      <WandelAppPlaceholder />
+      <SafetyZones />
     </>
   )
 })
