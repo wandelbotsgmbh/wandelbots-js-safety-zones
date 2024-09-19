@@ -4,8 +4,12 @@ import { env } from "./runtimeEnv"
 let nova: NovaClient | null = null
 
 const getSecureUrl = (url: string): string => {
-    return url.startsWith('https://') ? url : `https://${url}`;
-};
+    return url.startsWith('http://') || url.startsWith('https://') 
+      ? url 
+      : url.includes('wandelbots.io') 
+        ? `https://${url}` 
+        : `http://${url}`;
+}
 
 export const getNovaClient = () => {
   if (!nova) {
