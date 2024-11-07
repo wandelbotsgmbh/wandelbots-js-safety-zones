@@ -16,5 +16,6 @@ export function getExposedRuntimeEnv() {
     NODE_ENV: process.env.NODE_ENV,
     NOVA_USERNAME: process.env.NOVA_USERNAME,
     NOVA_PASSWORD: process.env.NOVA_PASSWORD,
+    NOVA_ACCESS_TOKEN: process.env.NOVA_ACCESS_TOKEN,
   }
 }
