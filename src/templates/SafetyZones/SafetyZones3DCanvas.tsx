@@ -8,10 +8,9 @@ import { isIOS, isSafari } from "react-device-detect"
 
 import { PresetEnvironment } from "@wandelbots/wandelbots-js-react-components"
 import { Robot } from "@wandelbots/wandelbots-js-react-components"
-import { SupportedRobot } from "@wandelbots/wandelbots-js-react-components"
 import { SafetyZonesRenderer } from "@wandelbots/wandelbots-js-react-components"
 import { useActiveRobot } from "@/WandelAppContext"
-import type { SafetySetupSafetyZone } from "@wandelbots/wandelbots-api-client"
+import type { SafetySetupSafetyZone } from "@wandelbots/nova-api/v1"
 
 export function SafetyZones3DCanvas() {
   Object3D.DEFAULT_UP = new Vector3(0, 0, 1)

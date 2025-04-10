@@ -1,12 +1,12 @@
 import type {
   ControllerInstance,
   MotionGroupPhysical,
-} from "@wandelbots/wandelbots-api-client"
+} from "@wandelbots/nova-api/v1"
 import { flatten, keyBy } from "lodash-es"
 import { makeAutoObservable } from "mobx"
-import type { ConnectedMotionGroup } from "@wandelbots/wandelbots-js"
-import { ProgramStateConnection } from "@wandelbots/wandelbots-js"
-import type { NovaClient } from "@wandelbots/wandelbots-js"
+import type { ConnectedMotionGroup } from "@wandelbots/nova-js/v1"
+import { ProgramStateConnection } from "@wandelbots/nova-js/v1"
+import type { NovaClient } from "@wandelbots/nova-js/v1"
 
 export type MotionGroupOption = {
   selectionId: string

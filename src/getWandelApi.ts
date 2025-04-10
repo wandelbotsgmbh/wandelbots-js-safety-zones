@@ -1,4 +1,4 @@
-import { NovaClient } from "@wandelbots/wandelbots-js"
+import { NovaClient } from "@wandelbots/nova-js/v1"
 import { env } from "./runtimeEnv"
 
 let nova: NovaClient | null = null
