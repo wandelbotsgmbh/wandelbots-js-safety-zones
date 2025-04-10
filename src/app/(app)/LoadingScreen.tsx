@@ -1,4 +1,4 @@
-import { makeErrorMessage } from "@wandelbots/wandelbots-js"
+import { makeErrorMessage } from "@wandelbots/nova-js"
 import { CircularProgress, Stack } from "@mui/material"
 
 export const LoadingScreen = (props: { message?: string; error?: unknown }) => {
