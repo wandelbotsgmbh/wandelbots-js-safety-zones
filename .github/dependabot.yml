@@ -5,4 +5,4 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 0 # security updates only as they do not count into this limit
+    open-pull-requests-limit: 0 # security updates only, as they do not count toward this limit
