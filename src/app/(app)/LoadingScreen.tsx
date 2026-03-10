@@ -1,5 +1,5 @@
-import { makeErrorMessage } from "@wandelbots/nova-js"
-import { CircularProgress, Stack } from "@mui/material"
+import { CircularProgress, Stack } from "@mui/material";
+import { makeErrorMessage } from "@wandelbots/nova-js";
 
 export const LoadingScreen = (props: { message?: string; error?: unknown }) => {
   return (
@@ -18,12 +18,12 @@ export const LoadingScreen = (props: { message?: string; error?: unknown }) => {
         </>
       )}
     </Stack>
-  )
-}
+  );
+};
 
 const LoadingErrorMessage = (props: { message?: string; error: unknown }) => {
-  const errorMessage = makeErrorMessage(props.error)
-  const stack = props.error instanceof Error ? props.error.stack : null
+  const errorMessage = makeErrorMessage(props.error);
+  const stack = props.error instanceof Error ? props.error.stack : null;
 
   return (
     <Stack
@@ -44,5 +44,5 @@ const LoadingErrorMessage = (props: { message?: string; error: unknown }) => {
       <br />
       {stack && <pre>{stack}</pre>}
     </Stack>
-  )
-}
+  );
+};
