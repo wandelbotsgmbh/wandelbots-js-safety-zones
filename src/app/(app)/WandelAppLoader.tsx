@@ -13,7 +13,6 @@ import type {
 } from "@wandelbots/nova-js/v2"
 
 export const WandelAppLoader = observer((props: { children: ReactNode }) => {
-  const nova = getNovaClient()
   const novaV2 = getNovaClientV2()
 
   const state = useLocalObservable(() => ({
@@ -41,18 +40,13 @@ export const WandelAppLoader = observer((props: { children: ReactNode }) => {
 
     let controllers: string[] = []
 
-    let controllersRes
     try {
       controllers = await novaV2.api.controller.listRobotControllers()
-
-      controllersRes = await nova.api.controller.listControllers()
     } catch (error) {
       console.error("Error: No connection to WandelAPI")
     }
 
-    const availableControllers = controllersRes?.instances || []
-
-    console.log(`Available controllers:\n  `, availableControllers)
+    console.log(`Available controllers:\n  `, controllers)
 
     state.wandelApp = new WandelApp(novaV2, controllers)
 
@@ -61,12 +55,11 @@ export const WandelAppLoader = observer((props: { children: ReactNode }) => {
      * select the first available ones
      */
     if (!state.wandelApp.selectedMotionGroupId) {
-      // TODO select first one (index = 0)
-      const controller = state.wandelApp.controllers?.[4]
+      const controller = state.wandelApp.controllers?.[0]
       let motionGroup: string | null = null
       let modelFromController: string | null = null
       let controllerKind: string | null = null
-      let safetyZones: MotionGroupDescription['safety_zones'] | null = null
+      let safetyZones: MotionGroupDescription['safety_zones'] = {}
 
       if (controller) {
         /**
@@ -98,7 +91,7 @@ export const WandelAppLoader = observer((props: { children: ReactNode }) => {
                 motionGroup,
               )
             modelFromController = motionGroupDescription.motion_group_model
-            safetyZones = motionGroupDescription.safety_zones ?? null
+            safetyZones = motionGroupDescription.safety_zones ?? {}
           } catch (error) {
             throw new Error(
               "API Error: getMotionGroupDescription request failed",
