@@ -10,7 +10,7 @@ import { NoMotionGroupModal } from "@wandelbots/wandelbots-js-react-components"
 export const WandelAppMain = observer(() => {
   const wandelApp = useWandelApp()
 
-  if (!wandelApp.motionGroupOptions.length) {
+  if (!wandelApp.controllers.length) {
     // No robots (virtual or otherwise)! We can't do much without a robot.
     return <NoMotionGroupModal baseUrl={env.WANDELAPI_BASE_URL} />
   }

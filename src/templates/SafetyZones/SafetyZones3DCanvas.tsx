@@ -8,16 +8,10 @@ import { isIOS, isSafari } from "react-device-detect"
 
 import {
   MotionGroupVisualizer,
-  PresetEnvironment,
-  type SupportedLinearAxisProps,
-  type SupportedRobotProps,
+  PresetEnvironment
 } from "@wandelbots/wandelbots-js-react-components"
-import { Robot } from "@wandelbots/wandelbots-js-react-components"
-import { SafetyZonesRenderer } from "@wandelbots/wandelbots-js-react-components"
 import { useActiveRobot } from "@/WandelAppContext"
-import type { SafetySetupSafetyZone } from "@wandelbots/nova-api/v1"
 import { observer } from "mobx-react-lite"
-import { transformIntoV2MotionState } from "@/utils/transformIntoV2MotionState"
 import { env } from "@/runtimeEnv"
 import { getSecureUrl } from "@/getWandelApi"
 
@@ -37,18 +31,6 @@ export const SafetyZones3DCanvas = observer(() => {
     followCamera: false,
     infiniteGrid: true,
   }
-
-  const motionProps = useMemo<
-    SupportedRobotProps | SupportedLinearAxisProps
-  >(() => {
-    return {
-      rapidlyChangingMotionState: transformIntoV2MotionState(
-        activeRobot.rapidlyChangingMotionState.state,
-      ),
-      modelFromController: activeRobot.modelFromController || "",
-      dhParameters: activeRobot.dhParameters as any,
-    }
-  }, [activeRobot.rapidlyChangingMotionState])
 
   return (
     <>
@@ -77,15 +59,17 @@ export const SafetyZones3DCanvas = observer(() => {
       >
         <color attach="background" args={["#303b51"]} />
 
-        <SafetyZonesRenderer
-          safetyZones={activeRobot.safetyZones as SafetySetupSafetyZone[]}
-        />
+          {/*<SafetyZonesRenderer*/}
+          {/*  safetyZones={activeRobot.safetyZones as SafetySetupSafetyZone[]}*/}
+          {/*/>*/}
 
         <group position={[0, 0, -0]} rotation={[Math.PI / 2, -Math.PI / 3, 0]}>
           <MotionGroupVisualizer
+            rapidlyChangingMotionState={activeRobot.rapidlyChangingMotionState}
+            modelFromController={activeRobot.modelFromController}
+            dhParameters={activeRobot.dhParameters}
             instanceUrl={getSecureUrl(env.WANDELAPI_BASE_URL || "")}
-            inverseSolver={null}
-            {...motionProps}
+            inverseSolver={activeRobot.inverseSolver}
           />
           <group
             position={[0, 0, 0.01]}

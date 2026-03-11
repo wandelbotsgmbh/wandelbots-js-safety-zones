@@ -1,68 +1,75 @@
-import type {
-  ControllerInstance,
-  MotionGroupPhysical,
-} from "@wandelbots/nova-api/v1"
-import { flatten, keyBy } from "lodash-es"
 import { makeAutoObservable } from "mobx"
-import type { ConnectedMotionGroup } from "@wandelbots/nova-js/v1"
-import { ProgramStateConnection } from "@wandelbots/nova-js/v1"
-import type { NovaClient } from "@wandelbots/nova-js/v1"
+import { tryParseJson } from "@wandelbots/nova-js"
+import type { NovaClient, RobotControllerState } from "@wandelbots/nova-js/v2"
 
-export type MotionGroupOption = {
-  selectionId: string
-} & MotionGroupPhysical
+import { ActiveRobot } from "@/ActiveRobot"
 
 /**
  * Main store for the current state of the robot pad.
  */
 export class WandelApp {
+  controller: string | null = null
   selectedMotionGroupId: string | null = null
-
-  programRunner: ProgramStateConnection | null = null
+  modelFromController: string | null = null
+  controllerKind: string | null = null
 
   /**
    * Represents the current state of the selected motion group
    * after setup and websocket connection */
-  activeRobot: ConnectedMotionGroup | null = null
+  activeRobot: ActiveRobot | null = null
 
   constructor(
     readonly nova: NovaClient,
-    readonly availableControllers: ControllerInstance[],
+    readonly controllers: string[],
   ) {
     (window as any).wandelApp = this
     makeAutoObservable(this)
   }
 
-  get motionGroupOptions() {
-    return flatten(
-      this.availableControllers.map(
-        (controller) => controller.physical_motion_groups,
-      ),
-    )
-  }
+  async selectMotionGroup(
+    controller: string,
+    controllerKind: string,
+    motionGroupId: string,
+    modelFromController: string,
+  ) {
+    this.controller = controller
+    this.selectedMotionGroupId = motionGroupId
+    this.modelFromController = modelFromController
+    this.controllerKind = controllerKind
 
-  get motionGroupOptionsById() {
-    return keyBy(this.motionGroupOptions, (mg) => mg.motion_group)
-  }
-
-  get motionGroup() {
-    if (!this.selectedMotionGroupId) return null
-
-    const motionGroup = this.motionGroupOptionsById[this.selectedMotionGroupId]
-    if (!motionGroup) {
-      throw new Error(
-        `Invalid motion group selection id ${this.selectedMotionGroupId}`,
+    if (controller && motionGroupId && modelFromController) {
+      /**
+       * Open the websocket to monitor controller state for e.g. e-stop
+       */
+      const controllerStateSocket = this.nova.openReconnectingWebsocket(
+        `/controllers/${controller}/state-stream`,
       )
+
+      /**
+       * Wait for the first message to get the initial state
+       */
+      const firstControllerMessage = await controllerStateSocket.firstMessage()
+      const initialControllerState = tryParseJson(firstControllerMessage.data)
+        ?.result as RobotControllerState
+
+      /**
+       * Wait for the kinematic model of the robot before setting it as active
+       * and triggering the render
+       */
+      const activeRobot = new ActiveRobot(
+        this.nova,
+        this.modelFromController,
+        this.selectedMotionGroupId,
+        this.controllerKind,
+        initialControllerState,
+        controllerStateSocket
+      )
+
+      await activeRobot.fetchKinematicModel(
+        this.modelFromController,
+      )
+
+      this.activeRobot = activeRobot
     }
-    return motionGroup
   }
-
-  async selectMotionGroup(motionGroupId: string) {
-    this.activeRobot = await this.nova.connectMotionGroup(motionGroupId)
-  }
-
-  async startProgramRunner() {
-    this.programRunner = new ProgramStateConnection(this.nova)
-  }
-
 }

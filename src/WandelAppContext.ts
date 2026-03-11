@@ -20,11 +20,3 @@ export function useActiveRobot() {
   }
   return activeRobot
 }
-
-export function useProgramRunner() {
-  const { programRunner } = useWandelApp()
-  if (!programRunner) {
-    throw new Error("Program Runner not running")
-  }
-  return programRunner
-}
