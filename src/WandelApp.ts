@@ -1,6 +1,10 @@
 import { makeAutoObservable } from "mobx"
 import { tryParseJson } from "@wandelbots/nova-js"
-import type { NovaClient, RobotControllerState } from "@wandelbots/nova-js/v2"
+import {
+  MotionGroupDescription,
+  type NovaClient,
+  type RobotControllerState,
+} from "@wandelbots/nova-js/v2"
 
 import { ActiveRobot } from "@/ActiveRobot"
 
@@ -22,7 +26,7 @@ export class WandelApp {
     readonly nova: NovaClient,
     readonly controllers: string[],
   ) {
-    (window as any).wandelApp = this
+    ;(window as any).wandelApp = this
     makeAutoObservable(this)
   }
 
@@ -31,6 +35,7 @@ export class WandelApp {
     controllerKind: string,
     motionGroupId: string,
     modelFromController: string,
+    safetyZones: MotionGroupDescription['safety_zones'],
   ) {
     this.controller = controller
     this.selectedMotionGroupId = motionGroupId
@@ -62,12 +67,11 @@ export class WandelApp {
         this.selectedMotionGroupId,
         this.controllerKind,
         initialControllerState,
-        controllerStateSocket
+        controllerStateSocket,
+        safetyZones,
       )
 
-      await activeRobot.fetchKinematicModel(
-        this.modelFromController,
-      )
+      await activeRobot.fetchKinematicModel(this.modelFromController)
 
       this.activeRobot = activeRobot
     }

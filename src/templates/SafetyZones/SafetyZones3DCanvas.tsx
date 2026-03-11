@@ -8,7 +8,8 @@ import { isIOS, isSafari } from "react-device-detect"
 
 import {
   MotionGroupVisualizer,
-  PresetEnvironment
+  PresetEnvironment,
+  SafetyZonesRenderer,
 } from "@wandelbots/wandelbots-js-react-components"
 import { useActiveRobot } from "@/WandelAppContext"
 import { observer } from "mobx-react-lite"
@@ -58,10 +59,9 @@ export const SafetyZones3DCanvas = observer(() => {
         }}
       >
         <color attach="background" args={["#303b51"]} />
-
-          {/*<SafetyZonesRenderer*/}
-          {/*  safetyZones={activeRobot.safetyZones as SafetySetupSafetyZone[]}*/}
-          {/*/>*/}
+        {activeRobot.safetyZones && (
+          <SafetyZonesRenderer safetyZones={activeRobot.safetyZones} />
+        )}
 
         <group position={[0, 0, -0]} rotation={[Math.PI / 2, -Math.PI / 3, 0]}>
           <MotionGroupVisualizer

@@ -66,6 +66,7 @@ export const WandelAppLoader = observer((props: { children: ReactNode }) => {
       let motionGroup: string | null = null
       let modelFromController: string | null = null
       let controllerKind: string | null = null
+      let safetyZones: MotionGroupDescription['safety_zones'] | null = null
 
       if (controller) {
         /**
@@ -97,6 +98,7 @@ export const WandelAppLoader = observer((props: { children: ReactNode }) => {
                 motionGroup,
               )
             modelFromController = motionGroupDescription.motion_group_model
+            safetyZones = motionGroupDescription.safety_zones ?? null
           } catch (error) {
             throw new Error(
               "API Error: getMotionGroupDescription request failed",
@@ -119,6 +121,7 @@ export const WandelAppLoader = observer((props: { children: ReactNode }) => {
           controllerKind,
           motionGroup,
           modelFromController,
+          safetyZones,
         )
       }
     }

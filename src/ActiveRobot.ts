@@ -5,6 +5,7 @@ import {
   type MotionGroupState,
   type NovaClient,
   type RobotControllerState,
+  MotionGroupDescription,
 } from "@wandelbots/nova-js/v2"
 import {
   tryParseJson,
@@ -47,6 +48,7 @@ export class ActiveRobot {
     readonly controllerKind: string,
     readonly initialControllerState: RobotControllerState,
     readonly controllerStateSocket: AutoReconnectingWebsocket,
+    readonly safetyZones: MotionGroupDescription['safety_zones'],
   ) {
     /**
      * Setting the rapidly changing motion state including all position data
