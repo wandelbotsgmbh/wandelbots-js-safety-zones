@@ -5,4 +5,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 0 # security updates only, as they do not count toward this limit
+      day: "monday"
+    commit-message:
+      prefix: "deps"
+    versioning-strategy: increase
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+      production-dependencies:
+        dependency-type: "production"
+    open-pull-requests-limit: 3
