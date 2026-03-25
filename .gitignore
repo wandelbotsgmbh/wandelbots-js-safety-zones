@@ -36,3 +36,6 @@ kubeconfig.yml
 *.tsbuildinfo
 
 bun.lockb
+
+# ide
+.idea

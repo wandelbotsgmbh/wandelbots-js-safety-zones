@@ -1,30 +1,22 @@
-"use client"
+"use client";
 
-import { createContext, useContext } from "react"
-import type { WandelApp } from "./WandelApp"
+import { createContext, useContext } from "react";
+import type { WandelApp } from "./WandelApp.ts";
 
-export const WandelAppContext = createContext<WandelApp | null>(null)
+export const WandelAppContext = createContext<WandelApp | null>(null);
 
 export const useWandelApp = () => {
-  const state = useContext(WandelAppContext)
+  const state = useContext(WandelAppContext);
   if (!state) {
-    throw new Error("useWandelApp must be used within WandelAppLoader")
+    throw new Error("useWandelApp must be used within WandelAppLoader");
   }
-  return state
-}
+  return state;
+};
 
 export function useActiveRobot() {
-  const { activeRobot } = useWandelApp()
+  const { activeRobot } = useWandelApp();
   if (!activeRobot) {
-    throw new Error("Expected active robot")
+    throw new Error("Expected active robot");
   }
-  return activeRobot
-}
-
-export function useProgramRunner() {
-  const { programRunner } = useWandelApp()
-  if (!programRunner) {
-    throw new Error("Program Runner not running")
-  }
-  return programRunner
+  return activeRobot;
 }

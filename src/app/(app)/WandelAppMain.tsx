@@ -1,23 +1,28 @@
-"use client"
+"use client";
 
-import { env } from "../../runtimeEnv"
-import { observer } from "mobx-react-lite"
-import { useWandelApp } from "../../WandelAppContext"
-import { LoadingScreen } from "./LoadingScreen"
-import { SafetyZones } from "../../templates/SafetyZones/SafetyZones"
-import { NoMotionGroupModal } from "@wandelbots/wandelbots-js-react-components"
+import { NoMotionGroupModal } from "@wandelbots/wandelbots-js-react-components";
+import { observer } from "mobx-react-lite";
+import { getSecureUrl } from "@/getWandelApi";
+import { env } from "@/runtimeEnv";
+import { SafetyZones } from "@/templates/SafetyZones/SafetyZones";
+import { useWandelApp } from "@/WandelAppContext";
+import { LoadingScreen } from "./LoadingScreen.tsx";
 
 export const WandelAppMain = observer(() => {
-  const wandelApp = useWandelApp()
+  const wandelApp = useWandelApp();
 
-  if (!wandelApp.motionGroupOptions.length) {
+  if (!wandelApp.controllers.length) {
     // No robots (virtual or otherwise)! We can't do much without a robot.
-    return <NoMotionGroupModal baseUrl={env.WANDELAPI_BASE_URL} />
+    return (
+      <NoMotionGroupModal
+        baseUrl={getSecureUrl(env.WANDELAPI_BASE_URL || "")}
+      />
+    );
   }
 
   // Everything below this point expects an active robot
   if (!wandelApp.activeRobot) {
-    return <LoadingScreen />
+    return <LoadingScreen />;
   }
 
   return (
@@ -25,5 +30,5 @@ export const WandelAppMain = observer(() => {
       {/* add your code here */}
       <SafetyZones />
     </>
-  )
-})
+  );
+});
